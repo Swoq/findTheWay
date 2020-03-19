@@ -5,13 +5,14 @@ public class Maze{
     private File file;
     private int length;
     private int width;
-    private char[][] maze;
+    private char[][] ch_maze;
+    private char[][] num_maze;
 
     public Maze(String path){
         this.path = path;
         length = defineLength(path);
         width = defineWidth(path, length);
-        maze = readMaze();
+        ch_maze = readMaze();
     }
 
     private static int defineLength(String path) {
@@ -61,14 +62,32 @@ public class Maze{
         return field;
     }
 
+    private public int[][] digitizeMaze(char[] ch_maze){
+        int length = this.length;
+        int width = this.width;
+        int space_indicator = 0;
+        int[][] num_maze = new int[width][length];
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < length; j++) {
+                if(ch_maze[i][j] == 'X')
+                    num_maze[i][j] = -1;
+                else if(ch_maze[i][j] == ' '){
+                    num_maze[i][j] = space_indicator;
+                    space_indicator++;
+                }
+            }
+        }
+        return num_maze;
+    }
+
     public void showMaze(){
         int i,j;
         for (i = 0; i < width; i++) {
             for (j = 0; j < length; j++) {
                 if(j < (length-1))
-                    System.out.print(maze[i][j]);
+                    System.out.print(ch_maze[i][j]);
                 else
-                    System.out.println(maze[i][j]);
+                    System.out.println(ch_maze[i][j]);
             }
         }
         System.out.println();
