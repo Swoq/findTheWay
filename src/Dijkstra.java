@@ -1,4 +1,6 @@
 public class Dijkstra {
+
+
     static class MultiList {
         int[] head;
         int[] next;
