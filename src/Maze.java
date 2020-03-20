@@ -18,8 +18,8 @@ public class Maze{
     }
 
     private static int defineLength(String path) {
-        int length = 0;
         BufferedReader bufferedReader;
+        int length = 0;
         try {
             bufferedReader = new BufferedReader(new FileReader(path));
             length = bufferedReader.readLine().length();
@@ -29,15 +29,24 @@ public class Maze{
         return length;
     }
 
-    private static int defineWidth(String path, int lenght){
-        File file = new File(path);
-        int file_size = (int) file.length();
-        int width = file_size/lenght;
+    private static int defineWidth(String path, int length){
+        BufferedReader bufferedReader;
+        int width = 0;
+        try {
+            bufferedReader = new BufferedReader(new FileReader(path));
+            while (bufferedReader.ready()) {
+                bufferedReader.readLine();
+                width++;
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return width;
     }
 
     private char[][] readMaze() {
-        file = new File(path);
         BufferedReader br = null;
         char[][] field = new char[width][length];
         char temp;
@@ -65,8 +74,8 @@ public class Maze{
     }
 
     private int[][] digitizeMaze(char[][] ch_maze){
-        int length = this.length;
         int width = this.width;
+        int length = this.length;
         int path_cells_counter = 0;
         int[][] num_maze = new int[width][length];
         for (int i = 0; i < width; i++) {
@@ -79,7 +88,7 @@ public class Maze{
                 }
             }
         }
-        path_cells_amount = path_cells_counter + 1;
+        path_cells_amount = path_cells_counter;
         return num_maze;
     }
 
@@ -121,7 +130,6 @@ public class Maze{
             nums[4] = num_maze[down][j];
         else
             nums[4] = -1;
-
         return nums;
     }
 
@@ -137,6 +145,5 @@ public class Maze{
         }
         System.out.println();
     }
-
 }
 
