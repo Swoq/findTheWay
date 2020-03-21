@@ -1,4 +1,6 @@
 import java.io.*;
+import java.util.Arrays;
+
 //    path = "./src/input_files/input_field.txt"
 public class Maze{
     String path;
@@ -38,8 +40,6 @@ public class Maze{
                 bufferedReader.readLine();
                 width++;
             }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -145,5 +145,45 @@ public class Maze{
         }
         System.out.println();
     }
+
+    public void showAdjacentMatrix(){
+        for (int[] i : checkMazeNodes()) {
+            System.out.println();
+            for (int j : i)
+                System.out.print(j + "  ");
+        }
+        System.out.println();
+    }
+
+    public void showMazeWithPath(int[] path){
+        for (int value : path) {
+            correctCharMaze(value);
+        }
+        showMaze();
+    }
+
+    private void correctCharMaze(int v){
+        for (int i = 0; i<ch_maze.length; i++){
+            int id = findIndex(digital_maze[i], v);
+            if (id != -1) {
+                ch_maze[i][id] = '.';
+                break;
+            }
+        }
+    }
+
+    private int findIndex(int[] arr, int value){
+        for(int i = 0; i<arr.length; i++){
+            if (arr[i] == value)
+                return i;
+        }
+        return -1;
+    }
+
+    public int[][] getDigital_maze() {
+        return digital_maze;
+    }
+
+
 }
 

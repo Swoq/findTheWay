@@ -3,11 +3,18 @@ import java.util.Arrays;
 import static java.util.Arrays.fill;
 
 public class Dijkstra {
-    int INF = Integer.MAX_VALUE / 2;
-    int vNum;
-    MultiList graph;
+    private int INF = Integer.MAX_VALUE / 2;
+    private int vNum;
+    private MultiList graph;
+    private int[] shortWay;
 
-    void dijkstraRMQ(int start, int end) {
+    public Dijkstra(int[][] matrix){
+        this.vNum = matrix.length;
+        graph = new MultiList(vNum, countEdges(matrix));
+        initGraph(matrix);
+    }
+
+    public int[] dijkstraRMQ(int start, int end) {
         boolean[] used = new boolean[vNum];
         int[] prev = new int[vNum];
         int[] dist = new int[vNum];
@@ -41,10 +48,9 @@ public class Dijkstra {
         }
         int[] sp = new int[stack.size()];
         for (int i = 0; i < sp.length; i++)
-            sp[i] = stack.poll() + 1;
-
-        System.out.printf("Кратчайшее расстояние между %d и %d = %d%n", start + 1, end + 1, dist[end]);
-        System.out.println("Кратчайший путь: " + Arrays.toString(sp));
+            sp[i] = stack.poll();
+        shortWay = sp.clone();
+        return sp;
     }
 
     static class MultiList {
@@ -56,9 +62,9 @@ public class Dijkstra {
 
         MultiList(int vNum, int eNum) {
             head = new int[vNum];
-            next = new int[eNum*2 + 1];
-            vert = new int[eNum*2 + 1];
-            cost = new int[eNum*2 + 1];
+            next = new int[eNum + 1];
+            vert = new int[eNum + 1];
+            cost = new int[eNum + 1];
         }
 
         void add(int u, int v, int w) {
@@ -66,12 +72,6 @@ public class Dijkstra {
             vert[cnt] = v;
             cost[cnt] = w;
             head[u] = cnt++;
-
-            next[cnt] = head[v];
-            vert[cnt] = u;
-            cost[cnt] = w;
-            head[v] = cnt++;
-
         }
     }
 
@@ -107,5 +107,33 @@ public class Dijkstra {
         int minIndex() {
             return val[1] < INF ? ind[1] : -1;
         }
+
     }
+
+    public int countEdges(int[][] matrix){
+        int numOfEdges = 0;
+        for (int[] ints : matrix) {
+            for (int j = 1; j < ints.length; j++) {
+                if (ints[j] != -1) {
+                    numOfEdges++;
+                }
+            }
+        }
+        return numOfEdges;
+    }
+
+    private void initGraph(int[][] matrix){
+        for (int i = 0; i < matrix.length; i++) {
+            for (int j = 1; j < matrix[i].length; j++) {
+                if (matrix[i][j] != -1){
+                    graph.add(i, matrix[i][j], 1);
+                }
+            }
+        }
+    }
+
+    public void showShortWay(){
+        System.out.println("Кратчайший путь: " + Arrays.toString(shortWay));
+    }
+
 }
